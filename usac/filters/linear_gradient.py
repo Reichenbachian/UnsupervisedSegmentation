@@ -24,5 +24,5 @@ class LinearGradient(Filter):
         '''
         rows, cols = img.shape
         c_coords, r_coords = np.meshgrid(np.arange(cols), np.arange(rows))
-
-        return np.array()
+        return np.stack([c_coords / cols,
+                         r_coords / rows])

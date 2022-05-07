@@ -1,10 +1,17 @@
-from usac.filters.rgb import RGBFilter
+from usac.filters.depth import DepthFilter
 from usac.filters.linear_gradient import LinearGradient
-from usac.config import RGBFilterOptions, LinearGradientOptions
+from usac.filters.color import ColorFilter
+from usac.filters.normals import NormalFilter
+from usac.filters.fpn import FPNFilter
+from usac.config import ColorFilterOptions, LinearGradientOptions, DepthFilterOptions, NormalFilterOptions, FPNFilterOptions
 
 
-FILTERS = {'rgb': (RGBFilter, RGBFilterOptions),
-           'linear': (LinearGradient, LinearGradientOptions)}
+FILTERS = {'color': (ColorFilter, ColorFilterOptions),
+           'linear': (LinearGradient, LinearGradientOptions),
+           'depth': (DepthFilter, DepthFilterOptions),
+           'normal': (NormalFilter, NormalFilterOptions),
+           'fpn': (FPNFilter, FPNFilterOptions)
+          }
 
 def resolve_filters(filter_list):
     filters = []

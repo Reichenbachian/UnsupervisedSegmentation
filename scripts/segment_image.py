@@ -32,7 +32,7 @@ def visualize_segmentations(segmentations: np.ndarray, rgbd_image: RGBD_Image) -
 
 @click.command()
 @click.argument("folder_path", type=str)
-@click.option("--filter", "filters", type=str, multiple=True, default=["rgb", "linear"])
+@click.option("--filter", "filters", type=str, multiple=True, default=["color", "linear", "depth", "normal"])
 @click.option("--scale", default=1, type=float)
 def main(folder_path, filters, scale):
 	rgbd_img = RGBD_Image(folder_path, scale)

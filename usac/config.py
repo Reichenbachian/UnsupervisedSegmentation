@@ -1,13 +1,27 @@
-class RGBFilterOptions:
-	connection_type = 8 # Not yet implemented
+class ColorFilterOptions:
+    colorspace = 'lab'
 
 
 class ClustererOptions:
-	weights = {'rgb': 1,
-			   'linear': 1}
+    weights = {'color': 1.0,
+               'linear': 0.1,
+               'depth': 1.0,
+               'normal': 0.1,
+               'fpn': 1.0
+               }
 
 class SimpleLabelVisualizerOptions:
-	overlay = False
+    overlay = False
 
 class LinearGradientOptions:
-	weight = 1
+    pass
+
+class DepthFilterOptions:
+    pass
+
+class NormalFilterOptions:
+    max_grad = 1 #200
+
+
+class FPNFilterOptions:
+    max_grad = 5

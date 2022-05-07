@@ -1,27 +1,23 @@
+'''
+Author: Alex Reichenbach
+Date: May 7
+
+Used to create the color as inputs to the ward
+agglomerative clustering method
+'''
+
 import numpy as np
+from skimage.color import rgb2lab
 
 from usac.filters.filter import Filter
 from usac.data.rgbd_image import RGBD_Image
 
-class RGBFilter(Filter):
-    offsets = {"left": [0, -1],
-               "left up": [-1, -1],
-               "up": [-1, 0],
-               "up right": [-1, 1],
-               "right": [0, 1],
-               "right down": [1, 1],
-               "down": [1, 0],
-               "down left": [1, -1]}
+class ColorFilter(Filter):
+    def __init__(self, cfg):
+        self.cfg = cfg
 
-    # The graph connection to (ie to the left)
-    # 0) Left, (r, c - 1)
-    # 1) Left up, (r - 1, c - 1)
-    # 2) Up, (r - 1, c)
-    # 3) Up right, (r - 1, c + 1)
-    # 4) Right, (r, c + 1)
-    # 5) Right Down, (r + 1, c + 1)
-    # 6) Down, (r + 1, c)
-    # 7) Down Left, (r + 1, c - 1)
+        self.convert_methods = {'rgb': self.to_rgb,
+                                'lab': self.to_lab}
 
     def extract_hog_features(self, img):
         # Test Image
@@ -80,5 +76,19 @@ class RGBFilter(Filter):
             weights.append(edge_weights)
         return weights
 
+    def to_rgb(self, img: np.ndarray) -> np.ndarray:
+        return img
+
+    def to_lab(self, img: np.ndarray) -> np.ndarray:
+        '''
+        We use this color space because it is used in SLIC
+        '''
+        img = np.transpose(rgb2lab(np.transpose(img, [1,2,0])), [2,0,1])
+        # Normalize between 0 and 1
+        img -= img.min()
+        img /= img.max()
+        return img
+
     def _filter_image(self, rgbd_image: RGBD_Image) -> np.ndarray:
-        return rgbd_image.rgb 
+        img = self.convert_methods[self.cfg.colorspace](rgbd_image.rgb)
+        return img

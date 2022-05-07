@@ -31,4 +31,7 @@ class Filter():
         '''
         # In the future this should check if it's a 
         # 4 return and augment it to an 8
-        return self._filter_image(img)
+        filtered = self._filter_image(img)
+
+        assert filtered.min() >= 0 and filtered.max() <= 1, f"All filters should return values between 0 and 1. {self} failed"
+        return filtered

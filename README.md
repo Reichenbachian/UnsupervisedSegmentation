@@ -1,4 +1,4 @@
-# Unsupervised Segmentatio through Agglomerative Clustering
+# Unsupervised Segmentation through Agglomerative Clustering
 
 ![Example Segmentation](doc_imgs/Figure_1.png)
 

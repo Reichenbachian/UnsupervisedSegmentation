@@ -1,5 +1,7 @@
 # Unsupervised Segmentatio through Agglomerative Clustering
 
+![Example Segmentation](doc_imgs/Figure_1.png)
+
 This project is an unsupervised segmentation approach that augments the process via interactivity and depth.
 
 Future Features:

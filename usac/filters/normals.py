@@ -45,6 +45,6 @@ class NormalFilter(Filter):
         # plt.imshow(zx)
         # plt.show()
 
-        # breakpoint()
+        breakpoint()
 
         return np.stack([zx, zy])

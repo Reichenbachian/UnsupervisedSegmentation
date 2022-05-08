@@ -10,9 +10,6 @@ class ClustererOptions:
                'fpn': 1.0
                }
 
-class SimpleLabelVisualizerOptions:
-    overlay = False
-
 class LinearGradientOptions:
     pass
 
@@ -26,5 +23,13 @@ class NormalFilterOptions:
 class FPNFilterOptions:
     max_grad = 5
 
+## Visualizers
+class SimpleLabelVisualizerOptions:
+    overlay = False
+
 class ScrollerVisualizerOptions:
     pass
+
+class ClickSplitVisualizerOptions:
+    pass
+

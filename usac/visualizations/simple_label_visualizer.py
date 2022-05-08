@@ -5,9 +5,9 @@ class SimpleLabelVisualizer():
     def __init__(self, cfg):
         assert cfg.overlay == False, "Haven't done this yet"
 
-    def visualize(self, labels, rgb_img=None, depth_img=None) -> None:
-        rgb_img = np.transpose(rgb_img, [1,2,0])
-        if rgb_img is not None:
+    def visualize(self, labels, rgb=None, depth=None, dendogram=None) -> None:
+        rgb = np.transpose(rgb, [1,2,0])
+        if rgb is not None:
             cm = plt.get_cmap('tab20')
             # Apply the colormap like a function to any array:
             labels = cm(labels)[:,:,:3]
@@ -16,7 +16,8 @@ class SimpleLabelVisualizer():
             labels -= labels.min()
             labels /= labels.max()
 
-        img = np.concatenate([rgb_img, labels])
+        img = np.concatenate([rgb, labels])
+        img = img.clip(0, 1)
 
         plt.imshow(img)
         plt.show()

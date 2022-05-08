@@ -3,64 +3,35 @@ from matplotlib.widgets import Slider
 import numpy as np
 
 from usac.visualizations.visualizer import Visualizer
+from usac.visualizations.utils import labels_for_timestep
+
+
 
 class ScrollerVisualizer(Visualizer):
+    def update_labels(self, val: float, dendogram:np.ndarray, fig, ax, rows: int, cols: int):
+        base = 1.5
+        largest_val = np.log(10) / np.log(base)
+        multiplier = (self.rows * self.cols - 1) / largest_val
+        timestep = int(np.log(val) * multiplier / np.log(base))
+        labels = labels_for_timestep(dendogram, timestep, self.rows, self.cols)
+        plt.gca().set_prop_cycle(None)
+        ax.imshow(labels, cmap='tab20')
+        fig.canvas.draw_idle()
+
     def visualize(self, labels: np.ndarray,
                   rgb: np.ndarray = None,
                   depth: np.ndarray = None,
                   dendogram: np.ndarray = None) -> None:
+        self.rows, self.cols = labels.shape
+        initial_timestep = 1
 
-        # Setting Plot and Axis variables as subplots() function returns tuple(fig, ax)
-        fig, axs = plt.subplots()
-         
-        # Adjust the bottom size according to the requirement of the user
-        plt.subplots_adjust(bottom=0.25)
-         
-        # Set the x and y axis to some dummy data
-        t = np.arange(0.0, 100.0, 0.1)
-        s = np.sin(2*np.pi*t)
-         
-        # plot the x and y using plot function
-        l = plt.plot(t, s)
-         
-        # Set the axis and slider position in the plot
-        axis_position = plt.axes([0.2, 0.1, 0.65, 0.03],
-                                 facecolor = 'White')
-        slider_position = Slider(axis_position,
-                                 'Pos', 0.1, 90.0)
-         
-        # update() function to change the graph when the
-        # slider is in use
-        def update(val):
-            pos = slider_position.val
-            axs.axis([pos, pos+10, -1, 1])
-            fig.canvas.draw_idle()
-         
+        labels = labels_for_timestep(dendogram, initial_timestep, self.rows, self.cols)
+        fig, ax = plt.subplots()
+        axcolor = 'lightgoldenrodyellow'
+        axmin = fig.add_axes([0.25, 0.1, 0.65, 0.03])
+        slider_position = Slider(axmin, "Log step", 1, 10, initial_timestep)
+        ax.imshow(labels, cmap='tab20')
         # update function called using on_changed() function
-        slider_position.on_changed(update)
-         
-        # Display the plot
+        slider_position.on_changed(lambda x: self.update_labels(x, dendogram, fig, ax, self.rows, self.cols))
         plt.show()
 
-
-
-        # import itertools
-        # ii = itertools.count(198 * 288)
-        # for x in dendogram:
-        #     print({'node_id': next(ii), 'left': x[0], 'right':x[1]})
-        # breakpoint()
-
-        # rgb_img = np.transpose(rgb_img, [1,2,0])
-        # if rgb_img is not None:
-        #     cm = plt.get_cmap('tab20')
-        #     # Apply the colormap like a function to any array:
-        #     labels = cm(labels)[:,:,:3]
-
-        #     # maximize visualization
-        #     labels -= labels.min()
-        #     labels /= labels.max()
-
-        # img = np.concatenate([rgb_img, labels])
-
-        # plt.imshow(img)
-        plt.show()

@@ -34,13 +34,26 @@ class RGBD_Image():
         # It's disparity, convert to depth
         depth_path = os.path.join(root, "disp_gt/front0/000000.png")
         config_path = os.path.join(root, "disp_gt/metadata.json")
+        calib_path = os.path.join(root, "calib_v0.json")
 
         with open(config_path, 'r') as f:
             config_data = json.load(f)
 
-        arr = cv2.imread(os.fspath(depth_path), cv2.IMREAD_ANYDEPTH)
-        arr = arr * float(config_data['resolution'])
-        return arr
+        with open(calib_path, 'r') as f:
+            calib_data = json.load(f)
+
+        disp = cv2.imread(os.fspath(depth_path), cv2.IMREAD_ANYDEPTH)
+        disp = disp * float(config_data['resolution'])
+
+        # Disparity to depth
+        baseline = abs(calib_data["extrinsics"][0]["transformation"]["translation"][0])
+        fx = calib_data["intrinsics"][0]["fx"]
+        mask = disp == 0 # Stopping divide by 0 errors
+        disp[mask] = 1
+        depth = (baseline * fx) / disp
+        depth[mask] = 0
+
+        return depth
 
     @property
     def shape(self):

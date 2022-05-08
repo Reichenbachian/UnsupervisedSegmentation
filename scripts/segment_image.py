@@ -7,7 +7,7 @@ from usac.filters import resolve_filters
 from usac.data.rgbd_image import RGBD_Image
 from usac.clusterer import Clusterer
 from usac.config import ClustererOptions, ScrollerVisualizerOptions
-from usac.visualizations import ScrollerVisualizer
+from usac.visualizations import resolve_visualizer
 
 def segment_image(rgbd_img: RGBD_Image, filter_names: str, scale: float) -> (np.ndarray, np.ndarray):
 	print("Segmenting Image")
@@ -25,9 +25,10 @@ def segment_image(rgbd_img: RGBD_Image, filter_names: str, scale: float) -> (np.
 
 	return clusters, dendogram
 
-def visualize_segmentations(segmentations: np.ndarray, rgbd_image: RGBD_Image, dendogram: np.ndarray) -> None:
+def visualize_segmentations(viz_name: str, segmentations: np.ndarray,
+		rgbd_image: RGBD_Image, dendogram: np.ndarray) -> None:
 	print("Visualizing Image...")
-	viz = ScrollerVisualizer(ScrollerVisualizerOptions)
+	viz = resolve_visualizer(viz_name)
 	viz.visualize(segmentations, rgb=rgbd_image.rgb,
 				  depth=rgbd_image.depth, dendogram=dendogram)
 
@@ -35,12 +36,13 @@ def visualize_segmentations(segmentations: np.ndarray, rgbd_image: RGBD_Image, d
 @click.argument("folder_path", type=str)
 @click.option("--filter", "filters", type=str, multiple=True, default=["color", "linear", "depth", "normal"])
 @click.option("--scale", default=1, type=float)
-def main(folder_path, filters, scale):
+@click.option("--viz", default="simple", type=str)
+def main(folder_path, filters, scale, viz):
 	rgbd_img = RGBD_Image(folder_path, scale)
 
 	segmentations, dendogram = segment_image(rgbd_img, filters, scale)
 
-	visualize_segmentations(segmentations, rgbd_img, dendogram)
+	visualize_segmentations(viz, segmentations, rgbd_img, dendogram)
 
 if __name__ == "__main__":
 	main()

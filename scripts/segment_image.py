@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 from usac.filters import resolve_filters
 from usac.data.rgbd_image import RGBD_Image
 from usac.clusterer import Clusterer
-from usac.config import ClustererOptions, SimpleLabelVisualizerOptions
-from usac.visualizations import SimpleLabelVisualizer
+from usac.config import ClustererOptions, ScrollerVisualizerOptions
+from usac.visualizations import ScrollerVisualizer
 
-def segment_image(rgbd_img: RGBD_Image, filter_names: str, scale: float) -> np.ndarray:
+def segment_image(rgbd_img: RGBD_Image, filter_names: str, scale: float) -> (np.ndarray, np.ndarray):
 	print("Segmenting Image")
 
 	filters = resolve_filters(filter_names)
@@ -23,12 +23,13 @@ def segment_image(rgbd_img: RGBD_Image, filter_names: str, scale: float) -> np.n
 	clusterer = Clusterer(ClustererOptions)
 	clusters, dendogram = clusterer.cluster(graph_weights)
 
-	return clusters
+	return clusters, dendogram
 
-def visualize_segmentations(segmentations: np.ndarray, rgbd_image: RGBD_Image) -> None:
+def visualize_segmentations(segmentations: np.ndarray, rgbd_image: RGBD_Image, dendogram: np.ndarray) -> None:
 	print("Visualizing Image...")
-	viz = SimpleLabelVisualizer(SimpleLabelVisualizerOptions)
-	viz.visualize(segmentations, rgbd_image.rgb)
+	viz = ScrollerVisualizer(ScrollerVisualizerOptions)
+	viz.visualize(segmentations, rgb=rgbd_image.rgb,
+				  depth=rgbd_image.depth, dendogram=dendogram)
 
 @click.command()
 @click.argument("folder_path", type=str)
@@ -37,9 +38,9 @@ def visualize_segmentations(segmentations: np.ndarray, rgbd_image: RGBD_Image) -
 def main(folder_path, filters, scale):
 	rgbd_img = RGBD_Image(folder_path, scale)
 
-	segmentations = segment_image(rgbd_img, filters, scale)
+	segmentations, dendogram = segment_image(rgbd_img, filters, scale)
 
-	visualize_segmentations(segmentations, rgbd_img)
+	visualize_segmentations(segmentations, rgbd_img, dendogram)
 
 if __name__ == "__main__":
 	main()

@@ -60,5 +60,4 @@ class Clusterer():
                                        connectivity=connectivity).fit(filtered_vector)
         
         labels = clusterer.labels_.reshape(rows, cols)
-
-        return labels, None
+        return labels, clusterer.children_

@@ -25,3 +25,6 @@ class NormalFilterOptions:
 
 class FPNFilterOptions:
     max_grad = 5
+
+class ScrollerVisualizerOptions:
+    pass

@@ -1,1 +1,3 @@
+from usac.visualizations.visualizer import Visualizer
 from usac.visualizations.simple_label_visualizer import SimpleLabelVisualizer
+from usac.visualizations.scroller_visualizer import ScrollerVisualizer

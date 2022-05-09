@@ -41,10 +41,4 @@ class NormalFilter(Filter):
         zy /= zy.max()
 
 
-        # import matplotlib.pyplot as plt
-        # plt.imshow(zx)
-        # plt.show()
-
-        breakpoint()
-
         return np.stack([zx, zy])

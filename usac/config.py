@@ -4,10 +4,10 @@ class ColorFilterOptions:
 
 class ClustererOptions:
     weights = {'color': 1.0,
-               'linear': 0.1,
-               'depth': 1.0,
-               'normal': 0.1,
-               'fpn': 1.0
+               'linear': 0.2,
+               'depth': 0.5,
+               'normal': 0.5,
+               'fpn': 0.1
                }
 
 class LinearGradientOptions:

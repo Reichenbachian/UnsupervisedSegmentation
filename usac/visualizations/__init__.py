@@ -5,9 +5,9 @@ from usac.visualizations.click_split import ClickSplitVisualizer
 from usac.config import SimpleLabelVisualizerOptions, ScrollerVisualizerOptions, ClickSplitVisualizerOptions
 
 VIZS = {'simple': (SimpleLabelVisualizer, SimpleLabelVisualizerOptions),
-           'scroller': (ScrollerVisualizer, ScrollerVisualizerOptions),
-           'clicksplit': (ClickSplitVisualizer, ClickSplitVisualizerOptions)
-          }
+        'scroller': (ScrollerVisualizer, ScrollerVisualizerOptions),
+        'clicksplit': (ClickSplitVisualizer, ClickSplitVisualizerOptions)
+       }
 
 def resolve_visualizer(viz_name):
     viz_name = viz_name.lower()

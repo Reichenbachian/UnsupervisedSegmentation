@@ -34,9 +34,9 @@ def visualize_segmentations(viz_name: str, segmentations: np.ndarray,
 
 @click.command()
 @click.argument("folder_path", type=str)
-@click.option("--filter", "filters", type=str, multiple=True, default=["color", "linear", "depth", "normal"])
-@click.option("--scale", default=1, type=float)
-@click.option("--viz", default="simple", type=str)
+@click.option("--filter", "filters", type=str, multiple=True, default=["all"], help="Options are color, linear, depth, normal, fpn, or all")
+@click.option("--scale", default=1, type=float, help="How to scale the input image. 1 = 100%")
+@click.option("--viz", default="simple", type=str, help='Options are simple, scroller, and clicksplit')
 def main(folder_path, filters, scale, viz):
     if len(filters) == 1 and filters[0].lower() == 'all':
         filters = FILTERS.keys()
